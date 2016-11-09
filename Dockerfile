@@ -15,3 +15,7 @@ RUN set -x \
 RUN set -x \
   && mkdir -p /opt/atlassian/bamboo \
   && mkdir -p /var/opt/atlassian/application-data/bamboo
+
+ADD files/entrypoint /usr/local/bin/entrypoint
+
+ENTRYPOINT  ["/usr/local/bin/entrypoint"]
