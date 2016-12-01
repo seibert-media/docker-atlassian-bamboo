@@ -22,6 +22,13 @@ This is a Docker-Image for Atlassian Bamboo based on [Alpine Linux](http://alpin
 * 8085
 * 54663
 
+## Build conatiner
+Specify the application version in the build command:
+
+```bash
+docker build --build-arg VERSION=x.x.x . 
+```
+
 ## Getting started
 
 Run Bamboo standalone and navigate to `http://[dockerhost]:8085` to finish configuration:
@@ -36,7 +43,7 @@ Run Bamboo standalone with customised jvm settings and navigate to `http://[dock
 docker run -tid -p 8085:8085 -p 54663:54663 -e JVM_MEMORY_MIN=2g -e JVM_MEMORY_MAX=4g seibertmedia/atlassian-bamboo:latest
 ```
 
-Specify persistent volume for Bamboo data directory and redirect application logs to stdout:
+Specify persistent volume for Bamboo data directory:
 
 ```bash
 docker run -tid -p 8085:8085 -p 54663:54663 -v bamboo_data:/var/opt/atlassian/application-data/bamboo seibertmedia/atlassian-bamboo:latest
