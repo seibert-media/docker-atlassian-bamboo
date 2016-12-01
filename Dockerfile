@@ -43,4 +43,6 @@ EXPOSE 54663
 
 USER daemon
 
+VOLUME $BAMBOO_HOME
+
 ENTRYPOINT  ["/usr/local/bin/entrypoint"]
