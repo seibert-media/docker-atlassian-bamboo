@@ -40,13 +40,12 @@ RUN set -x \
   && chown -R daemon:daemon $BAMBOO_INST \
   && chown -R daemon:daemon $BAMBOO_HOME
 
-EXPOSE 8085
-EXPOSE 54663
+EXPOSE 8085 54663
 
 USER daemon
 
 VOLUME $BAMBOO_HOME
 
-ENTRYPOINT  ["/usr/local/bin/entrypoint"]
+ENTRYPOINT ["/usr/local/bin/entrypoint"]
 
 CMD ["/usr/local/bin/service"]
