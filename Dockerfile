@@ -31,9 +31,11 @@ RUN set -x \
   && touch -d "@0" "$BAMBOO_INST/conf/server.xml" \
   && touch -d "@0" "$BAMBOO_INST/atlassian-bamboo/WEB-INF/classes/bamboo-init.properties"
 
+ADD files/service /usr/local/bin/service
 ADD files/entrypoint /usr/local/bin/entrypoint
 
 RUN set -x \
+  && chown -R daemon:daemon /usr/local/bin/service \
   && chown -R daemon:daemon /usr/local/bin/entrypoint \
   && chown -R daemon:daemon $BAMBOO_INST \
   && chown -R daemon:daemon $BAMBOO_HOME
@@ -46,3 +48,5 @@ USER daemon
 VOLUME $BAMBOO_HOME
 
 ENTRYPOINT  ["/usr/local/bin/entrypoint"]
+
+CMD ["/usr/local/bin/service"]
