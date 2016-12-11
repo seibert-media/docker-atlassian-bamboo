@@ -1,0 +1,3 @@
+#!/bin/bash
+
+${BAMBOO_INST}/bin/start-bamboo.sh -fg
