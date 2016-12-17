@@ -8,6 +8,7 @@ FROM anapsix/alpine-java:8_server-jre
 MAINTAINER //SEIBERT/MEDIA GmbH <docker@seibert-media.net>
 
 ARG VERSION
+ARG MYSQL_JDBC_VERSION
 
 ENV BAMBOO_INST /opt/atlassian/bamboo 
 ENV BAMBOO_HOME /var/opt/atlassian/application-data/bamboo
@@ -30,10 +31,15 @@ RUN set -x \
   && chown -R $SYSTEM_USER:$SYSTEM_GROUP /home/$SYSTEM_USER
 
 ADD https://www.atlassian.com/software/bamboo/downloads/binary/atlassian-bamboo-$VERSION.tar.gz /tmp
+ADD https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz /tmp
 
 RUN set -x \
   && tar xvfz /tmp/atlassian-bamboo-$VERSION.tar.gz --strip-components=1 -C $BAMBOO_INST \
   && rm /tmp/atlassian-bamboo-$VERSION.tar.gz
+
+RUN set -x \
+  && tar xvfz /tmp/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz mysql-connector-java-$MYSQL_JDBC_VERSION/mysql-connector-java-$MYSQL_JDBC_VERSION-bin.jar -C  $BAMBOO_INST/atlassian-bamboo/WEB-INF/lib/ \
+  && rm /tmp/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz
 
 RUN set -x \
   && touch -d "@0" "$BAMBOO_INST/bin/setenv.sh" \
