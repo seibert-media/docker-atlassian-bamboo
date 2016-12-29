@@ -35,7 +35,16 @@ ADD https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-$MYSQL_
 
 RUN set -x \
   && tar xvfz /tmp/atlassian-bamboo-$VERSION.tar.gz --strip-components=1 -C $BAMBOO_INST \
-  && rm /tmp/atlassian-bamboo-$VERSION.tar.gz
+  && rm /tmp/atlassian-bamboo-$VERSION.tar.gz \
+  && chmod -R 700 "${BAMBOO_INST}/conf" \
+  && chmod -R 700 "${BAMBOO_INST}/logs" \
+  && chmod -R 700 "${BAMBOO_INST}/temp" \
+  && chmod -R 700 "${BAMBOO_INST}/work" \
+  && chown -R $SYSTEM_USER:$SYSTEM_GROUP "${BAMBOO_INST}/conf" \
+  && chown -R $SYSTEM_USER:$SYSTEM_GROUP "${BAMBOO_INST}/logs" \
+  && chown -R $SYSTEM_USER:$SYSTEM_GROUP "${BAMBOO_INST}/temp" \
+  && chown -R $SYSTEM_USER:$SYSTEM_GROUP "${BAMBOO_INST}/work" \
+  && chown -R $SYSTEM_USER:$SYSTEM_GROUP $BAMBOO_HOME
 
 RUN set -x \
   && tar xvfz /tmp/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz mysql-connector-java-$MYSQL_JDBC_VERSION/mysql-connector-java-$MYSQL_JDBC_VERSION-bin.jar -C $BAMBOO_INST/atlassian-bamboo/WEB-INF/lib/ \
@@ -51,9 +60,7 @@ ADD files/entrypoint /usr/local/bin/entrypoint
 
 RUN set -x \
   && chown -R $SYSTEM_USER:$SYSTEM_GROUP /usr/local/bin/service \
-  && chown -R $SYSTEM_USER:$SYSTEM_GROUP /usr/local/bin/entrypoint \
-  && chown -R $SYSTEM_USER:$SYSTEM_GROUP $BAMBOO_INST \
-  && chown -R $SYSTEM_USER:$SYSTEM_GROUP $BAMBOO_HOME
+  && chown -R $SYSTEM_USER:$SYSTEM_GROUP /usr/local/bin/entrypoint
 
 EXPOSE 8085 54663
 
