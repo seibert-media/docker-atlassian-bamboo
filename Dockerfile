@@ -34,7 +34,7 @@ ADD https://www.atlassian.com/software/bamboo/downloads/binary/atlassian-bamboo-
 ADD https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz /tmp
 
 RUN set -x \
-  && tar xvfz /tmp/atlassian-bamboo-$VERSION.tar.gz --strip-components=1 -C $BAMBOO_INST \
+  && tar xfz /tmp/atlassian-bamboo-$VERSION.tar.gz --strip-components=1 -C $BAMBOO_INST \
   && rm /tmp/atlassian-bamboo-$VERSION.tar.gz \
   && chmod -R 700 "${BAMBOO_INST}/conf" \
   && chmod -R 700 "${BAMBOO_INST}/logs" \
@@ -47,7 +47,7 @@ RUN set -x \
   && chown -R $SYSTEM_USER:$SYSTEM_GROUP $BAMBOO_HOME
 
 RUN set -x \
-  && tar xvfz /tmp/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz mysql-connector-java-$MYSQL_JDBC_VERSION/mysql-connector-java-$MYSQL_JDBC_VERSION-bin.jar -C $BAMBOO_INST/atlassian-bamboo/WEB-INF/lib/ \
+  && tar xfz /tmp/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz mysql-connector-java-$MYSQL_JDBC_VERSION/mysql-connector-java-$MYSQL_JDBC_VERSION-bin.jar -C $BAMBOO_INST/atlassian-bamboo/WEB-INF/lib/ \
   && rm /tmp/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz
 
 RUN set -x \
