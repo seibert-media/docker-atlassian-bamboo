@@ -34,14 +34,7 @@ RUN set -x \
   && wget -nv -O /tmp/atlassian-bamboo-${VERSION}.tar.gz https://www.atlassian.com/software/bamboo/downloads/binary/atlassian-bamboo-${VERSION}.tar.gz \
   && tar xfz /tmp/atlassian-bamboo-${VERSION}.tar.gz --strip-components=1 -C ${BAMBOO_INST} \
   && rm /tmp/atlassian-bamboo-${VERSION}.tar.gz \
-  && chmod -R 700 "${BAMBOO_INST}/conf" \
-  && chmod -R 700 "${BAMBOO_INST}/logs" \
-  && chmod -R 700 "${BAMBOO_INST}/temp" \
-  && chmod -R 700 "${BAMBOO_INST}/work" \
-  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} "${BAMBOO_INST}/conf" \
-  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} "${BAMBOO_INST}/logs" \
-  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} "${BAMBOO_INST}/temp" \
-  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} "${BAMBOO_INST}/work" \
+  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} ${BAMBOO_INST} \
   && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} ${BAMBOO_HOME}
 
 RUN set -x \
