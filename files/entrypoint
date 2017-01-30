@@ -9,6 +9,8 @@ if [ "$(stat -c "%Y" "${BAMBOO_INST}/atlassian-bamboo/WEB-INF/classes/bamboo-ini
 fi
 
 if [ "$(stat -c "%Y" "${BAMBOO_INST}/conf/server.xml")" -eq "0" ]; then
+  xmlstarlet ed --inplace -s '//Service[@name="Tomcat-Standalone"]' -t "elem" -n 'Connector port="8009" URIEncoding="UTF-8" enableLookups="false" protocol="AJP/1.3"' "${BAMBOO_INST}/conf/server.xml"
+
   if [ -n "${TOMCAT_PROXY_NAME}" ]; then
     xmlstarlet ed --inplace --pf --ps --insert '//Connector[@port="8085"]' --type "attr" --name "proxyName" --value "${TOMCAT_PROXY_NAME}" "${BAMBOO_INST}/conf/server.xml"
   fi
