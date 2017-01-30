@@ -8,16 +8,24 @@ This is a Docker-Image for Atlassian Bamboo based on [Alpine Linux](http://alpin
 * Setting application context path
 * Setting JVM xms and xmx values
 * Setting proxy parameters in server.xml to run it behind a reverse proxy (TOMCAT_PROXY_* ENV)
-* Includes MySQL JDBC driver
 
 ## Variables
 
-* TOMCAT_PROXY_NAME
-* TOMCAT_PROXY_PORT
-* TOMCAT_PROXY_SCHEME
-* TOMCAT_CONTEXT_PATH
+* TOMCAT_CONTEXT_PATH: default context path for bamboo is "/"
+
+Using with HTTP reverse proxy, not necessary with AJP:
+
+* TOMCAT_PROXY_NAME: domain of bamboo instance
+* TOMCAT_PROXY_PORT: e.g. 443
+* TOMCAT_PROXY_SCHEME: e.g. "https"
+
+JVM memory management:
+
 * JVM_MEMORY_MIN
 * JVM_MEMORY_MAX
+
+Crowd:
+To configure the SSO Connector follow the [Bamboo Docs](https://confluence.atlassian.com/crowd/integrating-crowd-with-atlassian-bamboo-198785.html#IntegratingCrowdwithAtlassianBamboo-2.5(Optional)EnableSingleSign-On) and edit the Config file in your BAMBOO_HOME directory accordingly.
 
 ## Ports
 * 8085

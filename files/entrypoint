@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ "$(stat -c "%U" ${BAMBOO_HOME})" != "${SYSTEM_USER}" ]; then
+  chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} ${BAMBOO_HOME}
+fi
+
 if [ "$(stat -c "%Y" "${BAMBOO_INST}/atlassian-bamboo/WEB-INF/classes/bamboo-init.properties")" -eq "0" ]; then
   sed --in-place "s~#bamboo.home=C:\/bamboo\/bamboo-home~bamboo.home=$BAMBOO_HOME~" ${BAMBOO_INST}/atlassian-bamboo/WEB-INF/classes/bamboo-init.properties
 fi
@@ -31,4 +35,10 @@ if [ "$(stat -c "%Y" "${BAMBOO_INST}/bin/setenv.sh")" -eq "0" ]; then
   fi
 fi
 
-exec "$@"
+if [ -n "${CROWD_SSO}" ]; then
+  xmlstarlet ed --inplace -u '//authenticator/@class' -v "com.atlassian.crowd.integration.seraph.v25.BambooAuthenticator" "${BAMBOO_INST}/webapp/WEB-INF/classes/seraph-config.xml"
+else
+  xmlstarlet ed --inplace -u '//authenticator/@class' -v "com.atlassian.bamboo.user.authentication.BambooAuthenticator" "${BAMBOO_INST}/webapp/WEB-INF/classes/seraph-config.xml"
+fi
+
+exec su-exec ${SYSTEM_USER} "$@"

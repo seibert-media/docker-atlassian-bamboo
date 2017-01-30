@@ -8,16 +8,15 @@ FROM anapsix/alpine-java:8_server-jre
 MAINTAINER //SEIBERT/MEDIA GmbH <docker@seibert-media.net>
 
 ARG VERSION
-ARG MYSQL_JDBC_VERSION
 
-ENV BAMBOO_INST /opt/atlassian/bamboo 
-ENV BAMBOO_HOME /var/opt/atlassian/application-data/bamboo
+ENV BAMBOO_INST /opt/bamboo 
+ENV BAMBOO_HOME /var/opt/bamboo
 ENV SYSTEM_USER bamboo
 ENV SYSTEM_GROUP bamboo
 ENV SYSTEM_HOME /home/bamboo
 
 RUN set -x \
-  && apk add git tar xmlstarlet wget ca-certificates openssh --update-cache --allow-untrusted --repository http://dl-cdn.alpinelinux.org/alpine/edge/main --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
+  && apk add git su-exec tar xmlstarlet wget ca-certificates openssh --update-cache --allow-untrusted --repository http://dl-cdn.alpinelinux.org/alpine/edge/main --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
   && rm -rf /var/cache/apk/*
 
 RUN set -x \
@@ -25,10 +24,10 @@ RUN set -x \
   && mkdir -p ${BAMBOO_HOME}
 
 RUN set -x \
-  && mkdir -p /home/${SYSTEM_USER} \
+  && mkdir -p ${SYSTEM_HOME} \
   && addgroup -S ${SYSTEM_GROUP} \
-  && adduser -S -D -G ${SYSTEM_GROUP} -h ${SYSTEM_GROUP} -s /bin/sh ${SYSTEM_USER} \
-  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} /home/${SYSTEM_USER}
+  && adduser -S -D -G ${SYSTEM_GROUP} -h ${SYSTEM_HOME} -s /bin/sh ${SYSTEM_USER} \
+  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} ${SYSTEM_HOME}
 
 RUN set -x \
   && wget -nv -O /tmp/atlassian-bamboo-${VERSION}.tar.gz https://www.atlassian.com/software/bamboo/downloads/binary/atlassian-bamboo-${VERSION}.tar.gz \
@@ -38,11 +37,6 @@ RUN set -x \
   && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} ${BAMBOO_HOME}
 
 RUN set -x \
-  && wget -nv -O /tmp/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz \
-  && tar xfz /tmp/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz mysql-connector-java-${MYSQL_JDBC_VERSION}/mysql-connector-java-${MYSQL_JDBC_VERSION}-bin.jar -C ${BAMBOO_INST}/atlassian-bamboo/WEB-INF/lib/ \
-  && rm /tmp/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz
-
-RUN set -x \
   && touch -d "@0" "${BAMBOO_INST}/bin/setenv.sh" \
   && touch -d "@0" "${BAMBOO_INST}/conf/server.xml" \
   && touch -d "@0" "${BAMBOO_INST}/atlassian-bamboo/WEB-INF/classes/bamboo-init.properties"
@@ -50,13 +44,7 @@ RUN set -x \
 ADD files/service /usr/local/bin/service
 ADD files/entrypoint /usr/local/bin/entrypoint
 
-RUN set -x \
-  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} /usr/local/bin/service \
-  && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} /usr/local/bin/entrypoint
-
 EXPOSE 8085 54663
-
-USER ${SYSTEM_USER}
 
 VOLUME ${BAMBOO_HOME}
 
