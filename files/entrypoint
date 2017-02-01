@@ -38,9 +38,9 @@ if [ "$(stat -c "%Y" "${BAMBOO_INST}/bin/setenv.sh")" -eq "0" ]; then
 fi
 
 if [ -n "${CROWD_SSO}" ]; then
-  xmlstarlet ed --inplace -u '//authenticator/@class' -v "com.atlassian.crowd.integration.seraph.v25.BambooAuthenticator" "${BAMBOO_INST}/WEB-INF/classes/seraph-config.xml"
+  xmlstarlet ed --inplace -u '//authenticator/@class' -v "com.atlassian.crowd.integration.seraph.v25.BambooAuthenticator" "${BAMBOO_INST}/atlassian-bamboo/WEB-INF/classes/seraph-config.xml"
 else
-  xmlstarlet ed --inplace -u '//authenticator/@class' -v "com.atlassian.bamboo.user.authentication.BambooAuthenticator" "${BAMBOO_INST}/WEB-INF/classes/seraph-config.xml"
+  xmlstarlet ed --inplace -u '//authenticator/@class' -v "com.atlassian.bamboo.user.authentication.BambooAuthenticator" "${BAMBOO_INST}/atlassian-bamboo/WEB-INF/classes/seraph-config.xml"
 fi
 
 exec su-exec ${SYSTEM_USER} "$@"
