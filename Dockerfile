@@ -44,7 +44,7 @@ RUN set -x \
 ADD files/service /usr/local/bin/service
 ADD files/entrypoint /usr/local/bin/entrypoint
 
-EXPOSE 8085 54663
+EXPOSE 8009 8085 54663
 
 VOLUME ${BAMBOO_HOME}
 
