@@ -35,7 +35,7 @@ To configure the SSO Connector follow the [Bamboo Docs](https://confluence.atlas
 Specify the application version in the build command:
 
 ```bash
-docker build --build-arg VERSION=x.x.x --build-arg MYSQL_JDBC_VERSION=5.1.40 . 
+docker build --build-arg VERSION=x.x.x . 
 ```
 
 ## Getting started
